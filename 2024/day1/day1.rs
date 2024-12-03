@@ -1,3 +1,4 @@
+use std::collections::HashMap;
 use std::env;
 use std::process;
 
@@ -56,7 +57,6 @@ fn part1(input: &str) -> i32 {
         }
     }
 
-
     left.sort();
     right.sort();
 
@@ -66,7 +66,27 @@ fn part1(input: &str) -> i32 {
 
         result += (l - r).abs()
     }
-    println!("Result: {result}");
+    println!("Part 1: {result}");
+
+    part2(left, right)
+}
+
+fn part2(left: Vec<i32>, right: Vec<i32>) -> i32 {
+    let mut result = 0;
+    let mut l_map = HashMap::new();
+
+    for i in 0..left.len() {
+        let count = right.iter().filter(|&&n| n == left[i]).count() as i32;
+        l_map.entry(left[i])
+            .and_modify(|e| *e += count)
+            .or_insert(count);
+    }
+
+    for (num, count) in &l_map {
+        result += num * count;
+    }
+
+    println!("Part 2: {}", result);
 
     result
 }
